@@ -10,6 +10,25 @@ def add_dish_ingredient(ingredient):
     return dish_ingredient
 
 
+def get_shop_list_by_dishes(dishes, person_count):
+    ingredients_list = {}
+    for dish in dishes:
+        if dish in cook_book:
+            for ingredient in cook_book[dish]:
+                quantity_count = ingredient['quantity']*person_count
+                name = ingredient['ingredient_name']
+                if name in ingredients_list:
+                    quantity_with_mesure = ingredients_list[name]
+                    quantity_count += quantity_with_mesure['quantity']
+                ingredient_quantity = {}
+                ingredient_quantity['measure'] = ingredient['measure']
+                ingredient_quantity['quantity'] = quantity_count
+                ingredients_list[ingredient['ingredient_name']] = ingredient_quantity
+        else:
+            print(f'No {dish} in cook book')
+    return ingredients_list
+
+
 with open('Recipes.txt', encoding='utf-8') as f:
     text_from_file = f.readlines()
 clear_text = []
@@ -31,4 +50,4 @@ for element in clear_text:
             cook_book.setdefault(dish, all_ingridients)
     if isinstance(element, int):
         quant = element
-print(cook_book)
+print(get_shop_list_by_dishes(['Омлет', 'Утка по-пекински', 'Фахитос'], 2))
